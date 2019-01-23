@@ -55,12 +55,12 @@ clientZMQ_config = {
                        "probe_client": {
                             "name": os.environ.get("PROBE_NAME", None),
                             "address": os.environ.get("PROBE_IP", None),
-                            "port": os.environ.get("PROBE_PORT", None)
+                            "port": int(os.environ.get("PROBE_PORT", 0))
                        },
 
                        "probe_server": {
                             "address": os.environ.get("SERVER_IP", None),
-                            "port": os.environ.get("SERVER_PORT", None)
+                            "port": int(os.environ.get("SERVER_PORT", 0))
                        }
                     }
 try:
