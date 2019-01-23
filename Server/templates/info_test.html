@@ -1,0 +1,363 @@
+{% block info_test %}
+    <form action="backend_test" method="post">
+        {% if test.status == "waiting" %}
+            <div class="container">
+                <article class="message is-warning">
+                    <div class="message-header">
+                        <p>Warning !</p>
+                    </div>
+                    <div class="message-body">
+                        The test is being performed, thank you for waiting
+                    </div>
+                </article>
+            </div>
+            <br>
+                <div class="container has-text-centered">
+                    <label id="refresh_timer" class="label has-text-weight-bold">Refreshing now ...</label>
+                </div>
+            <br>
+            <div class="container has-text-centered">
+                <a class="button is-large is-warning is-loading">Loading</a>
+            </div>
+        {% elif test.status =="done" %}
+            <div class="container">
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label"><h3 class="title">Results :</h3></label>
+                    </div>
+                    <div class="field-body">
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">ID :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <label>#{{ test.id }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Date :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <label>{{ test.date }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Test duration :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <label>{{ test.test_duration }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Target :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <label>{{ test.target }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Probe :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <label>{{ test.probe }}</label>
+                        </div>
+                    </div>
+                </div>
+                {% if test.ping %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Ping :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.ping == "host unreachable" %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.ping }}</label>
+                                {% else %}
+                                    <label>{{ test.ping }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.jitter %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Jitter :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.jitter == "host unreachable" %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.jitter }}</label>
+                                {% else %}
+                                    <label>{{ test.jitter }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.packet_loss %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Packet loss :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.packet_loss == "host unreachable" %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.packet_loss }}</label>
+                                {% else %}
+                                    <label>{{ test.packet_loss }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.mos %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">MOS :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.mos == "host unreachable" %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.mos }}</label>
+                                {% else %}
+                                    <label>{{ test.mos }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.download %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Download :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.download == "iperf3 not detected" or "error" in test.download %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.download }}</label>
+                                {% else %}
+                                    <label>{{ test.download }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.upload %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Upload :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                {% if test.upload == "iperf3 not detected" or "error" in test.upload %}
+                                    <label class="has-text-danger has-text-weight-bold">{{ test.upload }}</label>
+                                {% else %}
+                                    <label>{{ test.upload }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if download_json_raw %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Download iPerf JSON :</label>
+                        </div>
+                        <div class="field-body">
+                            <a id="display_download_json" class="button is-info">
+                                <span class="icon is-small">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                                <span>Display JSON</span>
+                            </a>
+                            &nbsp
+                            <a id="copy_download_json" class="button is-info">
+                                <span class="icon is-small">
+                                    <i class="far fa-copy"></i>
+                                </span>
+                                <span>Copy JSON</span>
+                            </a>
+                            <div id="download_json" class="field is-expanded is-hidden">
+                                <pre>{{ download_json_raw|safe }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if upload_json_raw %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label has-text-info">Upload iPerf JSON :</label>
+                        </div>
+                        <div class="field-body">
+                            <a id="display_upload_json" class="button is-info">
+                                <span class="icon is-small">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                                <span>Display JSON</span>
+                            </a>
+                            &nbsp
+                            <a id="copy_upload_json" class="button is-info">
+                                <span class="icon is-small">
+                                    <i class="far fa-copy"></i>
+                                </span>
+                                <span>Copy JSON</span>
+                            </a>
+                            <div id="upload_json" class="field is-expanded is-hidden">
+                                <pre>{{ upload_json_raw|safe }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.speedtest_option %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">Speedtest option :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                <label>{{ test.speedtest_option }}</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.packet_number %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">Packet number :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                <label>{{ test.packet_number }}</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if test.packet_timeout %}
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">Packet timeout :</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-expanded">
+                                <label>{{ test.packet_timeout }}</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Comments :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <textarea id="comments" class="textarea" name="comments" placeholder="bla bla">{% if test.comment %}{{ test.comment }}{% endif %}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label class="label">Status :</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <span class="tag is-medium is-success">{{ test.status }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elif test.status =="error" %}
+            <div class="container">
+                <article class="message is-danger">
+                    <div class="message-header">
+                        <p>Error !</p>
+                    </div>
+                    <div class="message-body">
+                        An error occurred, the test could not be performed correctly
+                    </div>
+                </article>
+            </div>
+            <br>
+            <div class="container has-text-centered">
+                <button class="button is-large is-danger" disabled>
+                    <span class="icon is-large">
+                      <i class="fas fa-times"></i>
+                    </span>
+                    <span>Error</span>
+                </button>
+            </div>
+        {% endif %}
+        <input id="status" class="is-hidden" value="{{ test.status }}">
+        <br>
+        <div class="container has-text-centered">
+            <a class="button is-info" href="/archive">
+                <span class="icon is-small">
+                    <i class="fas fa-chevron-circle-right"></i>
+                </span>
+                <span>Go back to archive</span>
+            </a>
+            {% if test.status =="done" %}
+                <button id="save_test" class="button is-success" name="choice" value="update_test">
+                    <span class="icon is-small">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            {% endif %}
+            {% if test.status =="done" or test.status =="error" %}
+            <a class="button is-danger modal-button" data-target="modal_{{ test.id }}" aria-haspopup="true">
+                <span class="icon is-small">
+                  <i class="fas fa-times"></i>
+                </span>
+                <span>Delete</span>
+            </a>
+            {% endif %}
+            <div id="modal_{{ test.id }}" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Warning !</p>
+                        <a class="delete" aria-label="close"></a>
+                    </header>
+                    <section class="modal-card-body">
+                        <div class="notification is-danger">
+                            Are you sure you want to delete test of {{ test.date }} ?
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <div class="container has-text-right">
+                            <button class="button is-danger" name="choice" value="delete_test">
+                                <span class="icon is-small">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span>Delete</span>
+                            </button>
+                            <a class="button">
+                                <span class="icon is-small">
+                                  <i class="fas fa-times"></i>
+                                </span>
+                                <span>Cancel</span>
+                            </a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <input class="is-hidden" name="test_id" value="{{ test.id }}">
+        </div>
+    </form>
+{% endblock %}

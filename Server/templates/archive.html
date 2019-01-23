@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Test List</h1>
+        </div>
+        <br>
+        <div class="container">
+            <h2 class="subtitle">
+                All test are stored and managed in a database
+            </h2>
+        </div>
+        <br>
+        {% if tests %}
+            <div class="container">
+                <table class="table is-bordered is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-centered">Date</th>
+                            <th class="has-text-centered">Target</th>
+                            <th class="has-text-centered">Probe</th>
+                            <th class="has-text-centered">Comment</th>
+                            <th class="has-text-centered">Status</th>
+                            <th class="has-text-centered">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for test in tests %}
+                            <tr>
+                                <td class="has-text-centered">{{ test.date }}</td>
+                                <td class="has-text-centered">{{ test.target }}</td>
+                                <td class="has-text-centered">{{ test.probe }}</td>
+                                {% if test.comment is not none %}
+                                    <td class="has-text-centered">
+                                        {{ test.comment[:30] }}
+                                        {% if test.comment|length > 30 %}
+                                            [...]
+                                        {% endif %}
+                                    </td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                <td class="has-text-centered">
+                                    {% if test.status == "waiting" %}
+                                        <span class="tag is-medium is-warning">
+                                    {% elif test.status == "done" %}
+                                        <span class="tag is-medium is-success">
+                                    {% else %}
+                                        <span class="tag is-medium is-danger">
+                                    {% endif %}
+                                        {{ test.status }}
+                                    </span>
+                                </td>
+                                <td class="has-text-centered">
+                                    <form action="backend_test" method="post">
+                                        <a class="button is-info" href="/test?id={{ test.id }}">
+                                            <span class="icon is-small">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                            <span>Details</span>
+                                        </a>
+                                        <a class="button is-danger modal-button" data-target="modal_{{ test.id }}" aria-haspopup="true">
+                                            <span class="icon is-small">
+                                              <i class="fas fa-times"></i>
+                                            </span>
+                                            <span>Delete</span>
+                                        </a>
+                                        <div id="modal_{{ test.id }}" class="modal">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Warning !</p>
+                                                    <a class="delete" aria-label="close"></a>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                    <div class="notification is-danger">
+                                                        Are you sure you want to delete test of {{ test.date }} ?
+                                                    </div>
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                    <div class="container has-text-right">
+                                                        <button class="button is-danger" name="choice" value="delete_test">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-check"></i>
+                                                            </span>
+                                                            <span>Delete</span>
+                                                        </button>
+                                                        <a class="button">
+                                                            <span class="icon is-small">
+                                                              <i class="fas fa-times"></i>
+                                                            </span>
+                                                            <span>Cancel</span>
+                                                        </a>
+                                                    </div>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <input class="is-hidden" name="test_id" value="{{ test.id }}">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="container has-text-centered has-text-danger">
+                <span class="icon is-small">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+                There is no test
+            </div>
+        {% endif %}
+    </section>
+    <br>
+{% endblock %}

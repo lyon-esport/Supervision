@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block headers %}
+    {{ super() }}
+    <script defer src="{{ url_for('static', filename='js/setting.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Server List</h1>
+        </div>
+        <br>
+        <div class="container">
+            <h2 class="subtitle">
+                Save your server to save time
+            </h2>
+        </div>
+        <br>
+        {% if servers %}
+            <div class="container">
+                <table class="table is-bordered is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-centered">Server name</th>
+                            <th class="has-text-centered">Server IP</th>
+                            <th class="has-text-centered">Server port</th>
+                            <th class="has-text-centered">Standard test</th>
+                            <th class="has-text-centered">Speedtest</th>
+                            <th class="has-text-centered">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for server in servers %}
+                            <tr>
+                                <td class="has-text-centered">{{ server.server_name }}</td>
+                                <td class="has-text-centered">{{ server.server_ip }}</td>
+                                {% if server.server_port %}
+                                    <td class="has-text-centered">
+                                        {{ server.server_port }}
+                                    </td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                {% if server.standard_test == 1 %}
+                                    <td class="has-text-centered has-text-success">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                    </td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                {% if server.speedtest == 1  %}
+                                    <td class="has-text-centered has-text-success">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                    </td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                <td class="has-text-centered">
+                                    <form action="backend_server" method="post">
+                                        <a id="button_edit_server_{{ server.id }}" class="button is-warning edit_server" aria-server_id="{{ server.id }}" aria-server_name="{{ server.server_name }}" aria-server_ip="{{ server.server_ip }}" aria-server_port="{{ server.server_port if server.server_port }}" aria-standard_test="{{ server.standard_test }}" aria-speedtest="{{ server.speedtest }}">
+                                            <span class="icon is-small">
+                                                <i class="fas fa-edit"></i>
+                                            </span>
+                                            <span>Edit</span>
+                                        </a>
+                                        <a class="button is-danger modal-button" data-target="modal_{{ server.id }}" aria-haspopup="true">
+                                            <span class="icon is-small">
+                                              <i class="fas fa-times"></i>
+                                            </span>
+                                            <span>Delete</span>
+                                        </a>
+                                        <div id="modal_{{ server.id }}" class="modal">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Warning !</p>
+                                                    <a class="delete" aria-label="close"></a>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                    <div class="notification is-danger">
+                                                        Are you sure you want to delete server {{ server.server_name }} ?
+                                                    </div>
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                    <div class="container has-text-right">
+                                                        <button class="button is-danger" name="choice" value="delete_server">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-check"></i>
+                                                            </span>
+                                                            <span>Delete</span>
+                                                        </button>
+                                                        <a class="button">
+                                                            <span class="icon is-small">
+                                                              <i class="fas fa-times"></i>
+                                                            </span>
+                                                            <span>Cancel</span>
+                                                        </a>
+                                                    </div>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <input name="server_id" value="{{ server.id }}" type="hidden">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="container has-text-centered has-text-danger">
+                <span class="icon is-small">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+                There is no server preseted
+            </div>
+        {% endif %}
+        <br>
+        <div id="form_edit" class="container is-hidden">
+            <form action="backend_server" method="post">
+                <div class="field has-addons has-addons-centered">
+                    <input id="save_server_id" name="save_server_id" value="" type="hidden">
+                    <div class="control">
+                        <label class="checkbox">
+                            <input id="save_standard_test" type="checkbox" name="save_standard_test" value="1">
+                            Standard test
+                        </label>
+                        <label class="checkbox">
+                            <input id="save_speedtest" type="checkbox" name="save_speedtest" value="1">
+                            Speedtest
+                        </label>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div class="control has-icons-right">
+                        <input id="save_server_name" class="input" type="text" name="save_server_name" placeholder="Server name">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="control has-icons-right">
+                        <input id="save_server_ip" class="input" type="text" name="save_server_ip" placeholder="Server IP">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div id="field_save_server_port" class="control has-icons-right is-hidden">
+                        <input id="save_server_port" class="input" type="text" name="save_server_port" min="1" max="65535" placeholder="5001" value="5001">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="control">
+                        <button id="button_save_server" class="button is-success" name="choice" value="update_server">
+                            <span class="icon is-small">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span>Save</span>
+                        </button>
+                    </div>
+                    <div class="control">
+                        <a id="button_cancel_save_server" class="button is-danger">
+                            <span class="icon is-small">
+                                <i class="fas fa-times"></i>
+                            </span>
+                            <span>Cancel</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+            <br>
+        </div>
+        <div class="container">
+            <form action="backend_server" method="post">
+                <div class="field has-addons has-addons-centered">
+                    <div class="control">
+                        <label class="checkbox">
+                            <input id="standard_test" type="checkbox" name="standard_test" value="1">
+                            Standard test
+                        </label>
+                        <label class="checkbox">
+                            <input id="speedtest" type="checkbox" name="speedtest" value="1">
+                            Speedtest
+                        </label>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div class="control has-icons-right">
+                        <input id="server_name" class="input" type="text" name="server_name" placeholder="Server name">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="control has-icons-right">
+                        <input id="server_ip" class="input" type="text" name="server_ip" placeholder="192.168.0.1">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div id="field_server_port" class="control has-icons-right is-hidden">
+                        <input id="server_port" class="input" type="number" name="server_port" min="1" max="65535" placeholder="5001" value="5001">
+                        <span class="icon is-small is-right">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="control">
+                        <button id="button_add_server" class="button is-info" name="choice" value="add_server">
+                            <span class="icon is-small">
+                                <i class="fas fa-plus-circle"></i>
+                            </span>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <br>
+{% endblock %}

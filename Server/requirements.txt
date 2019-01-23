@@ -1,0 +1,5 @@
+gunicorn
+Flask
+pyzmq
+pathlib
+requests

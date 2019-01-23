@@ -1,0 +1,8 @@
+{
+        "color":{
+                "error":"is-danger",
+                "warning":"is-warning",
+                "success":"is-success",
+                "info":"is-info"
+        }
+}

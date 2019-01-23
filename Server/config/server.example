@@ -1,0 +1,6 @@
+{
+        "server_zmq":{
+                "port": [50000, 50001, 50002, 50004]
+        },
+        "influxdb_url": "http://127.0.0.1:50000/write?db=prober"
+}

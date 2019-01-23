@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block headers %}
+    {{ super() }}
+    <script defer src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <br>
+    <div class="columns">
+        <div id="probe_info" class="column is-one-quarter">
+            {% include 'info_probe.html' with context %}
+        </div>
+        <div class="column is-three-quarter">
+            <div class="container has-text-centered">
+                <h2 class="title is-2">Start a test :</h2>
+            </div>
+            <form action="backend_test" method="post">
+                <section class="hero">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h5 class="subtitle is-5">
+                                <div class="field">
+                                    <label class="label">Standard test (Ping/Jitter/Packet loss/MOS)</label>
+                                    <div class="control">
+                                        <label class="radio">
+                                            <input id="standard_test" type="radio" name="standard_test" checked="checked" value="True">
+                                            Yes
+                                        </label>
+                                        <label class="radio">
+                                            <input id="no_standard_test" type="radio" name="standard_test" value="False">
+                                            No
+                                        </label>
+                                        <div id="field_standard_test_target" class="field has-addons">
+                                            <div class="control">
+                                                <div class="select is-success">
+                                                    <select id="standard_test_target" name="standard_test_target">
+                                                        {% for server in servers%}
+                                                            {% if server.standard_test == 1 %}
+                                                                <option value="{{ server.server_ip }}">{{ server.server_name }} - {{ server.server_ip }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="standard_test_target_ip" class="control has-icons-right is-hidden">
+                                                <input id="standard_test_ip" class="input" type="text" name="standard_test_ip" placeholder="Target IP">
+                                                <span class="icon is-small is-right">
+                                                  <i class="fas fa-exclamation-triangle"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="field_packet_number" class="field">
+                                    <label class="label">Packet number</label>
+                                    <div class="control has-icons-right">
+                                        <div class="control has-icons-right">
+                                            <input id="packet_number" class="input" type="number" name="packet_number" placeholder="100" value="100" min="10" max="300">
+                                            <span class="icon is-small is-right">
+                                              <i class="fas fa-exclamation-triangle"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="field_packet_timeout" class="field">
+                                    <label class="label">Packet timeout</label>
+                                    <div class="control has-icons-right">
+                                        <div class="control has-icons-right">
+                                            <input id="packet_timeout" class="input" type="number" name="packet_timeout" placeholder="3" value="3" min="1" max="5">
+                                            <span class="icon is-small is-right">
+                                              <i class="fas fa-exclamation-triangle"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                </section>
+                <section class="hero">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h5 class="subtitle is-5">
+                                <div class="field">
+                                    <label class="label">Speedtest</label>
+                                    <div class="control">
+                                        <label class="radio">
+                                            <input id="speedtest" type="radio" name="speedtest" checked="checked" value="True">
+                                            Yes
+                                        </label>
+                                        <label class="radio">
+                                            <input id="no_speedtest" type="radio" name="speedtest" value="False">
+                                            No
+                                        </label>
+                                    </div>
+                                    <div id="field_speedtest_target" class="field has-addons">
+                                        <div class="control">
+                                            <div class="select is-success">
+                                                <select name="speedtest_choice">
+                                                    <option value="0">Download and Upload</option>
+                                                    <option value="1">Download</option>
+                                                    <option value="2">Upload</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="control">
+                                            <div class="select is-success">
+                                                <select id="speedtest_target" name="speedtest_target">
+                                                    {% for server in servers%}
+                                                        {% if server.speedtest == 1 %}
+                                                            <option value="{{ server.id }}">{{ server.server_name }} - {{ server.server_ip }}:{{ server.server_port }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="speedtest_target_ip" class="control has-icons-right is-hidden">
+                                            <input id="speedtest_ip" class="input" type="text" name="speedtest_ip" placeholder="Server IP">
+                                            <span class="icon is-small is-right">
+                                              <i class="fas fa-exclamation-triangle"></i>
+                                            </span>
+                                        </div>
+                                        <div id="speedtest_target_port" class="control has-icons-right is-hidden">
+                                            <input id="speedtest_port" class="input" type="number" name="speedtest_port" min="1" max="65535" placeholder="Server port" value="5001">
+                                            <span class="icon is-small is-right">
+                                              <i class="fas fa-exclamation-triangle"></i>
+                                            </span>
+                                        </div>
+                                        <div class="control is-expanded">
+                                            <input class="input" type="text" name="speedtest_option" placeholder="iPerf options /!\syntax is not verified/!\">
+                                        </div>
+                                    </div>
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                </section>
+                <section class="hero">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h5 class="subtitle is-5">
+                                <div class="field">
+                                    <label class="label">Wich probe will do a test ?</label>
+                                    <div class="field has-addons">
+                                        <div class="control">
+                                            <div id="probe_select" class="control">
+                                                {% include 'select_probe.html' with context %}
+                                            </div>
+                                        </div>
+                                        <div class="control">
+                                            <a id="probe_select_refresh" class="button is-info">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                </span>
+                                                <span>Refresh</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                </section>
+                {% if influxdb_url != "" %}
+                    <section class="hero">
+                        <div class="hero-body">
+                            <div class="container">
+                                <h5 class="subtitle is-5">
+                                    <div class="field">
+                                        <label class="label">Do this as an autotest ?</label>
+                                        <div class="control">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <label class="radio">
+                                                        <input id="autotest" type="radio" name="autotest" value="True">
+                                                        Yes
+                                                    </label>
+                                                    <label class="radio">
+                                                        <input id="no_autotest" type="radio" name="autotest" checked="checked" value="False">
+                                                        No
+                                                    </label>
+                                                </div>
+                                                <div id="field_autotest_target" class="field is-hidden">
+                                                    <label class="label">Timer count between tests</label>
+                                                    <div class="control has-icons-right">
+                                                        <input id="autotest_target" class="input" type="number" name="autotest_timer" min="10" max="300" placeholder="Delay in seconds" value="30">
+                                                        <span class="icon is-small is-right">
+                                                          <i class="fas fa-exclamation-triangle"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h5>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+                <section class="hero">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h5 class="subtitle is-5">
+                                <div id="field_comments" class="field">
+                                    <label class="label">Comment</label>
+                                    <div class="control">
+                                        <div class="field is-expanded">
+                                            <textarea id="comments" class="textarea" name="comments" placeholder="Your awesome comment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                </section>
+                <div class="container has-text-centered">
+                    <button id="start_test" class="button is-info" name="choice" value="start">
+                        <span class="icon is-small">
+                            <i class="fas fa-terminal"></i>
+                        </span>
+                        <span>Start test</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+{% endblock %}

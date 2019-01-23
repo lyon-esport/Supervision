@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Auto Test</h1>
+        </div>
+        <br>
+        <div class="container">
+            <h2 class="subtitle">
+                Create automatic tests who send the results to InfluxDB
+            </h2>
+        </div>
+        <br>
+    </section>
+    {% if influxdb_url != "" %}
+        <section class="section">
+            <div class="container">
+                <h4 class="title is-4">InfluxDB HTTP API writing</h4>
+            </div>
+            <br>
+            <div class="container">
+                <h2 class="subtitle">
+                    --> {{ influxdb_url }}
+                </h2>
+            </div>
+            <br>
+        </section>
+        {% if autotest|length %}
+            <div class="container">
+                <table class="table is-bordered is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-centered">Probe</th>
+                            <th class="has-text-centered">Standard test</th>
+                            <th class="has-text-centered">Speedtest</th>
+                            <th class="has-text-centered">Delay</th>
+                            <th class="has-text-centered">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key in range(0, autotest|length) %}
+                            <tr>
+                                <td class="has-text-centered">{{ autotest[key].serverZMQ.client["name"] }}</td>
+                                {% if autotest[key].standard_test_target %}
+                                    <td class="has-text-centered">{{ autotest[key].standard_test_target }}</td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                {% if autotest[key].speedtest_target["ip"] and autotest[key].speedtest_target["port"] %}
+                                    <td class="has-text-centered">{{ autotest[key].speedtest_target["ip"] }}:{{ autotest[key].speedtest_target["port"] }}</td>
+                                {% else %}
+                                    <td class="has-text-centered has-text-danger">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                <td class="has-text-centered">{{ autotest[key].timer }}s</td>
+                                <td class="has-text-centered">
+                                    <form action="backend_autotest" method="post">
+                                        <a class="button is-danger modal-button" data-target="modal_{{ key }}" aria-haspopup="true">
+                                            <span class="icon is-small">
+                                              <i class="fas fa-times"></i>
+                                            </span>
+                                            <span>Delete</span>
+                                        </a>
+                                        <div id="modal_{{ key }}" class="modal">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Warning !</p>
+                                                    <a class="delete" aria-label="close"></a>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                    <div class="notification is-danger">
+                                                        Are you sure you want to delete autotest {{ autotest[key].serverZMQ.client["name"] }} ?
+                                                    </div>
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                    <div class="container has-text-right">
+                                                        <button class="button is-danger" name="choice" value="delete_autotest">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-check"></i>
+                                                            </span>
+                                                            <span>Delete</span>
+                                                        </button>
+                                                        <a class="button">
+                                                            <span class="icon is-small">
+                                                              <i class="fas fa-times"></i>
+                                                            </span>
+                                                            <span>Cancel</span>
+                                                        </a>
+                                                    </div>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <input name="autotest_id" value="{{ key }}" type="hidden">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="container has-text-centered has-text-danger">
+            <span class="icon is-small">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            AutoTest disabled : If you want to use AutoTest you need to setup in server.json an InfluxDB url, check github/README.md for further information.
+        </div>
+    {% endif %}
+    <br>
+{% endblock %}

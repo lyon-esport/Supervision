@@ -1,0 +1,51 @@
+{% block probe %}
+    <article class="message is-info">
+        <div class="message-header">
+            <p>Connected probes</p>
+        </div>
+        <div class="message-body">
+            {% if nbClientsAlive > 0 %}
+                {% for client in clients %}
+                    {% if client.is_alive %}
+                        {% if client.is_busy %}
+                            <span class="has-text-link">
+                            <span class="icon">
+                                <i class="fas fa-wrench"></i>
+                            </span>
+                            Probe : {{ client.name }} busy (uptime={{ client.uptime }})
+                        {% elif client.autotest %}
+                            <span class="has-text-danger">
+                            <span class="icon">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                            </span>
+                            Probe : {{ client.name }} free but used by an autotest (uptime={{ client.uptime }})
+                        {% else %}
+                            <span class="has-text-success">
+                            <span class="icon">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                            </span>
+                            Probe : {{ client.name }} free (uptime={{ client.uptime }})
+                        {% endif %}
+                        </span>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                    <span class="has-text-danger">
+                        <span class="icon">
+                            <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                        </span>
+                        None probe is connected
+                    </span>
+            {% endif %}
+            {% if clients|length == nbClientsAlive %}
+                <span class="has-text-danger">
+                    <span class="icon">
+                        <i class="fas fa-ban" aria-hidden="true"></i>
+                    </span>
+                    Maximum of capacity probes reached
+                </span>
+            {% endif %}
+        </div>
+    </article>
+{% endblock %}

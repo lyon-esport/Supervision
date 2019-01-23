@@ -1,0 +1,24 @@
+{% block probe %}
+    {% if nbClientsAliveAndNotBusy > 0 %}
+        <div class="select is-success">
+            <select name="probe">
+                {% for client in clients %}
+                    {% if client.is_alive and not client.is_busy %}
+                        <option value="{{ client.id }}">{{ client.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    {% else %}
+        <div class="field-body">
+            <div class="field">
+                <span class="has-text-danger has-text-weight-bold">
+                    <span class="icon">
+                        <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                    </span>
+                    None probes are connected or they are all busy&nbsp
+                </span>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

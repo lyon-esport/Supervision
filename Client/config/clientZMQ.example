@@ -1,0 +1,12 @@
+{
+        "probe_client":{
+                "name": "Probe_1",
+                "address": "127.0.0.1",
+                "port": 60000
+        },
+
+        "probe_server": {
+                "address": "127.0.0.1",
+                "port": 50000
+        }
+}

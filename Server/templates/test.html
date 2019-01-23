@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block headers %}
+    {{ super() }}
+    <script defer src="{{ url_for('static', filename='js/test.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <br>
+    <input id="test_id_origin" class="is-hidden" value="{{ test.0 }}">
+    <div class="container" id="test_info">
+        {% include 'info_test.html' with context %}
+    </div>
+    <br>
+{% endblock %}
