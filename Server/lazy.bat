@@ -1,7 +1,7 @@
 @echo off
 if not exist database.sqlite (
-		python setup.py %*
-		echo setup.py launched
+		python database_setup.py %*
+		echo database_setup.py launched
 )
 if not exist database.sqlite (
 	echo Something wrent wrong database.sqlite not created
