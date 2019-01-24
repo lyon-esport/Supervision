@@ -52,28 +52,26 @@ regex_name = r"^[0-9a-zA-Z -_]{4,20}$"
 
 # get clientZMQ config
 clientZMQ_config = {
-                       "probe_client": {
-                            "name": os.environ.get("PROBE_NAME", None),
-                            "address": os.environ.get("PROBE_IP", None),
-                            "port": int(os.environ.get("PROBE_PORT", 0))
-                       },
+    "probe_client": {
+        "name": os.environ.get("PROBE_NAME", None),
+        "address": os.environ.get("PROBE_IP", None),
+        "port": int(os.environ.get("PROBE_PORT", 0))
+    },
 
-                       "probe_server": {
-                            "address": os.environ.get("SERVER_IP", None),
-                            "port": int(os.environ.get("SERVER_PORT", 0))
-                       }
-                    }
+    "probe_server": {
+        "address": os.environ.get("SERVER_IP", None),
+        "port": int(os.environ.get("SERVER_PORT", 0))
+    }
+}
 try:
-    with open('config/clientZMQ.json') as json_data_file:
+    with open('config/clientZMQ.json', 'r') as json_data_file:
         clientZMQ_config.update(json.load(json_data_file))
 except Exception as error:
-        pass
+    pass
 try:
-    if not re.match(regex_name, clientZMQ_config["probe_client"]["name"])\
-            or not re.match(regex_ip, clientZMQ_config["probe_client"]["address"]) \
-            or not re.match(regex_ip, clientZMQ_config["probe_server"]["address"])\
-            or not (clientZMQ_config["probe_client"]["port"] >= 1 and clientZMQ_config["probe_client"]["port"] <= 65535) \
-            or not (clientZMQ_config["probe_server"]["port"] >= 1 and clientZMQ_config["probe_server"]["port"] <= 65535):
+    if not re.match(regex_name, clientZMQ_config["probe_client"]["name"]) \
+            or not (1 <= clientZMQ_config["probe_client"]["port"] <= 65535) \
+            or not (1 <= clientZMQ_config["probe_server"]["port"] <= 65535):
         raise Exception('clientZMQ.json wrong format')
 except Exception as error:
     print('Caught this error: ' + repr(error))
@@ -81,6 +79,7 @@ except Exception as error:
 
 serverZMQ = ServerZMQREP(clientZMQ_config["probe_client"]["port"])
 serverZMQ.start()
-clientZMQ = ClientZMQREQ(clientZMQ_config["probe_client"]["name"], clientZMQ_config["probe_client"]["address"], clientZMQ_config["probe_client"]["port"], clientZMQ_config["probe_server"]["address"], clientZMQ_config["probe_server"]["port"])
+clientZMQ = ClientZMQREQ(clientZMQ_config["probe_client"]["name"], clientZMQ_config["probe_client"]["address"],
+                         clientZMQ_config["probe_client"]["port"], clientZMQ_config["probe_server"]["address"],
+                         clientZMQ_config["probe_server"]["port"])
 clientZMQ.start()
-
