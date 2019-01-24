@@ -1,0 +1,34 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.6-latest-build as build
+
+# enable container init system
+ENV INITSYSTEM on
+
+MAINTAINER Ludovic Ortega ludovic.ortega@lyon-esport.fr
+
+# download supervision project
+RUN git clone https://github.com/lyon-esport/Supervision.git
+
+# copy file to /app/
+RUN mkdir -p /app/client_supervision/ && mv Supervision/Client/* /app/client_supervision/
+
+# remove useless file
+RUN cd / && rm -Rf ./Supervision
+
+# install dependencies
+RUN pip install -r ./app/client_supervision/requirements.txt
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.6-latest
+
+# copy client supervision
+COPY --from=build /app/client_supervision/ /app/client_supervision/
+
+# copy python library
+COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
+
+# set probe port
+ENV PROBE_PORT 5000
+
+# expose probe port
+EXPOSE 5000
+
+CMD ["python3", "/app/client_supervision/client.py"]
