@@ -38,8 +38,10 @@
 # termes.
 # ----------------------------------------------------------------------------
 
+import os
 import json
 import re
+import sys
 from pathlib import Path
 from os import urandom
 from flask import Flask, session, redirect, request, render_template
@@ -62,22 +64,38 @@ app.secret_key = urandom(16)
 with open('config/templates_config.json') as json_data_file:
     template_config = json.load(json_data_file)
 
-# get server ZMQ configuration
-with open('config/server.json') as json_data_file:
-    server_config = json.load(json_data_file)
+# get server config
+server_zmq_port = []
+try:
+    for port in range(0, int(os.environ.get("SERVER_ZMQ_NB_PORT", 0))):
+        server_zmq_port.append(port + int(os.environ.get("SERVER_ZMQ_FIRST_PORT", 0)))
+    server_config = {
+        "server_zmq": {
+            "port": server_zmq_port
+        },
 
-# check format of server.json
+        "influxdb_url": str(os.environ.get("INFLUXDB_URL", ""))
+    }
+except Exception as error:
+    print('Caught this error: ' + repr(error))
+    sys.exit()
+try:
+    with open('config/server.json') as json_data_file:
+        server_config.update(json.load(json_data_file))
+except Exception as error:
+    pass
+
 try:
     if len(set(server_config['server_zmq']['port'])) == 0:
         raise Exception('server.json wrong format')
     for i in range(0, len(set(server_config['server_zmq']['port']))):
-        if not server_config['server_zmq']['port'][i] >= 1 and server_config['server_zmq']['port'][i] <= 65535:
+        if not 1 <= int(server_config['server_zmq']['port'][i]) <= 65535:
             raise Exception('server.json wrong format')
     if server_config['influxdb_url'] is None:
         raise Exception('server.json wrong format')
 except Exception as error:
     print('Caught this error: ' + repr(error))
-    exit()
+    sys.exit()
 
 # regex
 regex_id = r"^[+]?[0-9]+$"
@@ -96,7 +114,7 @@ try:
     print("Connected to database %s" % database_filename)
 except Exception as error:
     print('Caught this error: ' + repr(error))
-    exit()
+    sys.exit()
 
 request_test_timeout = 120
 

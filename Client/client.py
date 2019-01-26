@@ -41,6 +41,7 @@
 import os
 import json
 import re
+import sys
 
 from functions.ServerZMQ import ServerZMQREP
 from functions.ClientZMQ import ClientZMQREQ
@@ -49,20 +50,22 @@ regex_ip = r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
 regex_name = r"^[0-9a-zA-Z -_]{4,20}$"
 
 # get client ZMQ configuration
+try:
+    clientZMQ_config = {
+        "probe_client": {
+            "name": str(os.environ.get("PROBE_NAME", "")),
+            "address": str(os.environ.get("PROBE_IP", "")),
+            "port": int(os.environ.get("PROBE_PORT", 0))
+        },
 
-# get clientZMQ config
-clientZMQ_config = {
-    "probe_client": {
-        "name": os.environ.get("PROBE_NAME", None),
-        "address": os.environ.get("PROBE_IP", None),
-        "port": int(os.environ.get("PROBE_PORT", 0))
-    },
-
-    "probe_server": {
-        "address": os.environ.get("SERVER_IP", None),
-        "port": int(os.environ.get("SERVER_PORT", 0))
+        "probe_server": {
+            "address": str(os.environ.get("SERVER_IP", "")),
+            "port": int(os.environ.get("SERVER_PORT", 0))
+        }
     }
-}
+except Exception as error:
+    print('Caught this error: ' + repr(error))
+    sys.exit()
 try:
     with open('config/clientZMQ.json', 'r') as json_data_file:
         clientZMQ_config.update(json.load(json_data_file))
@@ -70,12 +73,14 @@ except Exception as error:
     pass
 try:
     if not re.match(regex_name, clientZMQ_config["probe_client"]["name"]) \
+            or not re.match(regex_ip, clientZMQ_config["probe_client"]["address"]) \
             or not (1 <= clientZMQ_config["probe_client"]["port"] <= 65535) \
+            or not re.match(regex_ip, clientZMQ_config["probe_server"]["address"]) \
             or not (1 <= clientZMQ_config["probe_server"]["port"] <= 65535):
         raise Exception('clientZMQ.json wrong format')
 except Exception as error:
     print('Caught this error: ' + repr(error))
-    exit()
+    sys.exit()
 
 serverZMQ = ServerZMQREP(clientZMQ_config["probe_client"]["port"])
 serverZMQ.start()
