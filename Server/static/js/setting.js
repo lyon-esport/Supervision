@@ -3,6 +3,7 @@
 //
 // Contributeur(s):
 //     * Ortega Ludovic - ludovic.ortega@lyon-esport.fr
+//     * Etienne Guilluy - etienne.guilluy@lyon-esport.fr
 //     * Barbou Théo - theobarbou@gmail.com
 //     * Dupessy Clément - clement07131@hotmail.fr
 //     * Julian Marty - julian.marty83@gmail.com
