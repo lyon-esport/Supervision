@@ -192,13 +192,13 @@ Write-Host "-------------------                 --------------------" -Foregroun
 Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
 
 # get client name
-$probe_name=Read-Host "Client -> Name ?"
+$probe_name=Read-Host "Probe -> Name ?"
 
 # get client address
-$probe_address=Read-Host "Client -> Address ?[IPV4]"
+$probe_address=Read-Host "Probe -> Address ?[IPV4]"
 
 # get client port
-$probe_port=Read-Host "Client -> Port ?[1-65535]"
+$probe_port=Read-Host "Probe -> Port ?[1-65535]"
 
 # get server address
 $server_address=Read-Host "Server -> Address ?[IPV4]"
