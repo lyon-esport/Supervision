@@ -86,6 +86,7 @@ if(-not (Test-Path ".\python\python.exe"))
         Write-Host "Deleting python.zip ..."
         Remove-Item .\python.zip -Force
         Write-Host "Deleting successfull !" -ForegroundColor Green
+        # delete python\python37._pth for pipe command
         Write-Host "Deleting python\python37._pth ..."
         Remove-Item .\python\python37._pth -Force
         Write-Host "Deleting successfull !" -ForegroundColor Green
