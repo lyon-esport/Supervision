@@ -21,9 +21,11 @@ You can supervise your network in less than 10 minutes.
 #### Server Python
 *  Linux (Windows will use a developpement server not recommended for production)
 *  Python 3.6 or newer (Only for Standard method)
+*  Pip (Only for Standard method)
 
 #### Client Python
 *  Python 3.6 or newer (Only for Standard method)
+*  Pip (Only for Standard method)
 
 # Install and start the application
 
