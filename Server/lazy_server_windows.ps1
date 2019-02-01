@@ -226,6 +226,6 @@ if(!(Test-Path -Path $db_filename -PathType leaf)) {
 [Environment]::SetEnvironmentVariable("INFLUXDB_URL", $influxdb_url)
 [Environment]::SetEnvironmentVariable("FLASK_APP", $server_filename)
 
-flask run --host=0.0.0.0
+flask run --host=0.0.0.0 --port=80
 
 Read-Host -Prompt "Press Enter to exit..."

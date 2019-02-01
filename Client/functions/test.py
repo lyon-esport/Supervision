@@ -189,15 +189,11 @@ def start_standard_test(count, timeout, src_addr, src_name, dest_addr, dest_name
     # On catch les erreurs du module getopt
     help_line = 'Usage: %s -c [count] -t [timeout] -a [srcname] -b [dstname] -s [srcip] -d [dsthost] ' \
                 '-o [normal|nagios|rrd] -f [rrd file]'
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], ':hc:t:a:b:s:d:o:f:')
-    except getopt.GetoptError as err:
-        print (help_line % sys.argv[0])
-        sys.exit(1)
+
+    opts, args = getopt.getopt(sys.argv[1:], ':hc:t:a:b:s:d:o:f:')
     for opt, arg in opts:
         if opt in '-h':
-            print (help_line % sys.argv[0])
-            sys.exit(1)
+            raise Exception("ERROR: " + help_line % sys.argv[0])
         if opt in '-c':
             count = int(arg)
         elif opt in '-t':
@@ -221,27 +217,20 @@ def start_standard_test(count, timeout, src_addr, src_name, dest_addr, dest_name
 
     # On vérifie qu'on envoie bien au moins 1 paquet
     if count <= 0:
-        print("ERROR: count must be greater than zero.")
-        sys.exit(1)
+        raise Exception("ERROR: count must be greater than zero.")
+
     # On vérifie qu'on tolère un timeout d'au moins 1 seconde
     if timeout <= 0:
-        print("ERROR: timeout must be greater than zero.")
-        sys.exit(1)
+        raise Exception("ERROR: timeout must be greater than zero.")
         
     for i in range(0, count):
-        try:
-            time_sent.append(int(round(time.time() * 1000)))
-            d = do_one(src_addr, dest_addr, timeout)
-            if d is None:
-                lost = lost + 1
-                time_recv.append(None)
-                continue
-            else:
-                time_recv.append(int(round(time.time() * 1000)))
-        except:
-            print("Socket error") 
-            sys.exit(1)
-
+        time_sent.append(int(round(time.time() * 1000)))
+        d = do_one(src_addr, dest_addr, timeout)
+        if d is None:
+            lost = lost + 1
+            time_recv.append(None)
+        else:
+            time_recv.append(int(round(time.time() * 1000)))
         # Calcul de la latence
         latency.append(time_recv[i] - time_sent[i])
 
@@ -287,7 +276,7 @@ def start_standard_test(count, timeout, src_addr, src_name, dest_addr, dest_name
         tot_jitter = 'NaN'
 
     # Affichage des valeurs
-    if output == 'normal':
+    if output == 'default':
         print("Statistics for %s to %s:" % (src_name, dest_name))
         print(" - packet loss: %i (%.2f%%)" % (lost, lost_perc))
         if type(min_latency) != str and type(max_latency) != str and type(avg_latency) != str:
@@ -307,8 +296,7 @@ def start_standard_test(count, timeout, src_addr, src_name, dest_addr, dest_name
         return result_ping, result_jitter, result_packet_loss, result_mos
 
     else:
-        print('ERROR: output not defined.')
-        sys.exit(1)
+        raise Exception("ERROR: output not defined.")
 
 
 def start_speedtest(type, address, port, arg):

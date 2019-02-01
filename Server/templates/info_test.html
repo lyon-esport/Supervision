@@ -85,7 +85,7 @@
                         </div>
                         <div class="field-body">
                             <div class="field is-expanded">
-                                {% if test.ping == "host unreachable" %}
+                                {% if test.ping == "Error host unreachable" %}
                                     <label class="has-text-danger has-text-weight-bold">{{ test.ping }}</label>
                                 {% else %}
                                     <label>{{ test.ping }}</label>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="field-body">
                             <div class="field is-expanded">
-                                {% if test.jitter == "host unreachable" %}
+                                {% if test.jitter == "Error host unreachable" %}
                                     <label class="has-text-danger has-text-weight-bold">{{ test.jitter }}</label>
                                 {% else %}
                                     <label>{{ test.jitter }}</label>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="field-body">
                             <div class="field is-expanded">
-                                {% if test.packet_loss == "host unreachable" %}
+                                {% if test.packet_loss == "Error host unreachable" %}
                                     <label class="has-text-danger has-text-weight-bold">{{ test.packet_loss }}</label>
                                 {% else %}
                                     <label>{{ test.packet_loss }}</label>
@@ -133,7 +133,7 @@
                         </div>
                         <div class="field-body">
                             <div class="field is-expanded">
-                                {% if test.mos == "host unreachable" %}
+                                {% if test.mos == "Error host unreachable" %}
                                     <label class="has-text-danger has-text-weight-bold">{{ test.mos }}</label>
                                 {% else %}
                                     <label>{{ test.mos }}</label>

@@ -243,7 +243,6 @@ def backend_autotest():
             autotest_id = request.values.get('autotest_id')
             try:
                 autotest_id = int(autotest_id)
-                test = listAutotest[autotest_id]
                 listAutotest[autotest_id].serverZMQ.client["autotest"] = False
                 del listAutotest[autotest_id]
                 session['message_0'] = {

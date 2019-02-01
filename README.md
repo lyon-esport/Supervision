@@ -70,7 +70,7 @@ Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash 
    Windows :
    
         set FLASK_APP=server.py
-        python -m flask run --host=0.0.0.0
+        python -m flask run --host=0.0.0.0 --port=80
 
 7. Access to the server on `http:myIPAdress:80/` **-> replace myIPAdress by your IP address** 
 

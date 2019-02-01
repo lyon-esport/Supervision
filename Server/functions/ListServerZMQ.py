@@ -159,17 +159,23 @@ class ListServerClientZMQ(threading.Thread):
 
     @staticmethod
     def format_for_bdd(message):
-        if message["packet_loss"] != "":
-            message["packet_loss"] = "Packet loss: " + str(
-                message["packet_loss"]["packet_number"]) + ", Percentage of lost: " + str(
-                message["packet_loss"]["packet_percent"]) + "%"
+        if message["ping"] != "error":
+            if message["packet_loss"] != "":
+                message["packet_loss"] = "Packet loss: " + str(
+                    message["packet_loss"]["packet_number"]) + ", Percentage of lost: " + str(
+                    message["packet_loss"]["packet_percent"]) + "%"
+            else:
+                message["packet_loss"] = ""
+            if message["ping"] != "":
+                message["ping"] = "Min ping: " + str(message["ping"]["min"]) + ", Max ping: " + str(
+                    message["ping"]["max"]) + ", Average ping: " + str(message["ping"]["avg"])
+            else:
+                message["ping"] = ""
         else:
-            message["packet_loss"] = ""
-        if message["ping"] != "":
-            message["ping"] = "Min ping: " + str(message["ping"]["min"]) + ", Max ping: " + str(
-                message["ping"]["max"]) + ", Average ping: " + str(message["ping"]["avg"])
-        else:
-            message["ping"] = ""
+            message["ping"] = "Error host unreachable"
+            message["jitter"] = "Error host unreachable"
+            message["packet_loss"] = "Error host unreachable"
+            message["mos"] = "Error host unreachable"
         if message["speedtest"] != "":
             for speedtest in ["download", "upload"]:
                 if message["speedtest"][speedtest] != "":

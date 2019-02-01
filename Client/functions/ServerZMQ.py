@@ -79,8 +79,11 @@ class ServerZMQREP (threading.Thread):
         rrd_file = None  # RRD file
 
         if dest_addr != "":
-            ping, jitter, packet_loss, mos = start_standard_test(packet_number, packet_timeout, src_addr, src_name,
+            try:
+                ping, jitter, packet_loss, mos = start_standard_test(packet_number, packet_timeout, src_addr, src_name,
                                                                    dest_addr, dest_name, output, rrd_file)
+            except Exception as e:
+                ping, jitter, packet_loss, mos = "error", "error", "error", "error"
         else:
             ping, jitter, packet_loss, mos = "", "", "", ""
 
