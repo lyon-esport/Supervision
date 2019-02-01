@@ -65,7 +65,7 @@ Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash 
 
 6. Linux : 
 
-        `gunicorn  --bind 0.0.0.0:80`
+        `gunicorn server:app --bind 0.0.0.0:80`
         
    Windows :
    

@@ -82,12 +82,18 @@ class ClientZMQREQ(threading.Thread):
             logger.info("Time: %s\n Request: %s\n", datetime.now().replace(microsecond=0), self.message)
         else:
             self.message = {
+                            "type": "result",
                             "id": self.json_data["id"],
                             "ping": "",
                             "jitter": "",
                             "packet_loss": "",
                             "mos": "",
+                            "packet_number": "",
+                            "packet_timeout": "",
                             "speedtest": "",
+                            "speedtest_option": "",
+                            "comment": self.json_data["comment"],
+                            "influxdb": self.json_data["influxdb"],
                             "status": "error"
                             }
             logger.info("Time: %s\n Request: Timeout :(\n", datetime.now().replace(microsecond=0))

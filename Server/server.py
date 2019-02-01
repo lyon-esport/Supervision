@@ -91,7 +91,7 @@ regex_comment = r"^[a-zA-Z0-9@-_'\".()àéè&=+~^*!:?,<>ç{}%¨ ]*$"
 database_filename = "database.sqlite"
 try:
     if not Path(database_filename).is_file():
-        raise Exception('Please launch setup.py to create the database')
+        raise Exception('Please launch database_setup.py to create the database')
     bdd = Bdd(database_filename, template_config['color'], regex_id, regex_ip, regex_port, regex_name, regex_comment)
     bdd.connect()
     print("Connected to database %s" % database_filename)
