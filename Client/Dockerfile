@@ -80,9 +80,9 @@ COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python
 
 # set config
 ENV PROBE_NAME Probe
-ENV PROBE_IP 192.168.0.16
+ENV PROBE_IP 127.0.0.1
 ENV PROBE_PORT 20000
-ENV SERVER_IP 192.168.0.16
+ENV SERVER_IP 127.0.0.1
 ENV SERVER_PORT 30000
 
 # expose probe port

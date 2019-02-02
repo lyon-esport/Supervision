@@ -54,7 +54,7 @@ Linux :
     * SERVER_ZMQ_FIRST_PORT (First ZMQ port server)
     * SERVER_ZMQ_NB_PORT (Number of ZMQ server)
     * INFLUXDB_URL (Influxdb URL for autotest) - optionnal
-3. Set expose server port with 
+3. Set expose server port with all ZMQ port server
 4. Build the docker `docker build -t server .`
 5. Run the docker `docker run -p 80:80 -p <FIRST_ZMQ_PORT-LAST_ZMQ_PORT:FIRST_ZMQ_PORT-LAST_ZMQ_PORT> server`
 
