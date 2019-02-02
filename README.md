@@ -19,13 +19,15 @@ You can supervise your network in less than 10 minutes.
 # Requirements
 
 #### Server Python
-*  Linux (Windows will use a developpement server not recommended for production)
+*  Debian (Windows will use a developpement server not recommended for production)
 *  Python 3.6 or newer (Only for Standard method)
 *  Pip (Only for Standard method)
+*  Docker (Only for Lazy method)
 
 #### Client Python
 *  Python 3.6 or newer (Only for Standard method)
 *  Pip (Only for Standard method)
+*  Docker (Only for Lazy method)
 
 # Install and start the application
 
@@ -43,11 +45,15 @@ You have 2 methods :
 
 #### Server Python
 
-Start Server/lazy_server_windows.ps1 (windows) or Server/lazy_server_linux.bash (linux)
+Windows : Start Server/lazy_server_windows.ps1
+
+Linux : Use dockerfile Server/Dockerfile
 
 #### Client Python
 
-Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash (linux)
+Start Client/lazy_client_windows.ps1
+
+Linux : Use dockerfile Client/Dockerfile
 
 ## Standard method
 
@@ -57,7 +63,7 @@ Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash 
 
 2. Install the requirements: `pip install -r requirements.txt`
 
-3. Create the database `python3 setup.py` to generate the database (database.sqlite will appear)
+3. Create the database `python setup.py` to generate the database (database.sqlite will appear)
 
 4. Create `config/server.json` with the right settings (example : `config/server.example`)
 
@@ -65,7 +71,7 @@ Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash 
 
 6. Linux : 
 
-        `gunicorn server:app --bind 0.0.0.0:80`
+        gunicorn server:app --bind 0.0.0.0:80
         
    Windows :
    
@@ -84,7 +90,7 @@ Start Client/lazy_client_windows.ps1 (windows) or Client/lazy_client_linux.bash 
 
 4. Open a terminal in Client folder
 
-5. Start the client with `python3 client.py`
+5. Start the client with `python client.py`
 
 # IOT
 

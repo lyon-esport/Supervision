@@ -202,21 +202,22 @@ class ListServerClientZMQ(threading.Thread):
     @staticmethod
     def format_for_influx(message):
         data = ""
-        if message["ping"] != "":
-            data = data + "ping,probe=" + message["probe_name"] + " min=" + str(message["ping"]["min"]) \
-                   + ",avg=" + str(message["ping"]["avg"]) \
-                   + ",max=" + str(message["ping"]["max"]) + "\n"
-        if message["jitter"] != "":
-            data = data + "jitter,probe=" + message["probe_name"] + " value=" + str(message["jitter"]) + "\n"
-        if message["packet_loss"] != "":
-            data = data + "packet_loss,probe=" + message["probe_name"] + " number=" + str(message["packet_loss"]["packet_number"]) \
-                   + ",percent=" + str(message["packet_loss"]["packet_percent"]) + "\n"
-        if message["mos"] != "":
-            data = data + "mos,probe=" + message["probe_name"] + " value=" + str(message["mos"]) + "\n"
-        if message["packet_number"] != "":
-            data = data + "packet_number,probe=" + message["probe_name"] + " value=" + str(message["packet_number"]) + "\n"
-        if message["packet_timeout"] != "":
-            data = data + "packet_timeout,probe=" + message["probe_name"] + " value=" + str(message["packet_timeout"]) + "\n"
+        if message["ping"] != "error":
+            if message["ping"] != "":
+                data = data + "ping,probe=" + message["probe_name"] + " min=" + str(message["ping"]["min"]) \
+                       + ",avg=" + str(message["ping"]["avg"]) \
+                       + ",max=" + str(message["ping"]["max"]) + "\n"
+            if message["jitter"] != "":
+                data = data + "jitter,probe=" + message["probe_name"] + " value=" + str(message["jitter"]) + "\n"
+            if message["packet_loss"] != "":
+                data = data + "packet_loss,probe=" + message["probe_name"] + " number=" + str(message["packet_loss"]["packet_number"]) \
+                       + ",percent=" + str(message["packet_loss"]["packet_percent"]) + "\n"
+            if message["mos"] != "":
+                data = data + "mos,probe=" + message["probe_name"] + " value=" + str(message["mos"]) + "\n"
+            if message["packet_number"] != "":
+                data = data + "packet_number,probe=" + message["probe_name"] + " value=" + str(message["packet_number"]) + "\n"
+            if message["packet_timeout"] != "":
+                data = data + "packet_timeout,probe=" + message["probe_name"] + " value=" + str(message["packet_timeout"]) + "\n"
         if message["speedtest"] != "":
             for speedtest in ["download", "upload"]:
                 if message["speedtest"][speedtest] != "":

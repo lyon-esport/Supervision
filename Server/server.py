@@ -102,7 +102,7 @@ try:
     print("Connected to database %s" % database_filename)
 except Exception as error:
     print('Caught this error: ' + repr(error))
-    exit()
+    sys.exit()
 
 request_test_timeout = 120
 

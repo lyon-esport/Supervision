@@ -39,6 +39,7 @@
 # termes.
 # ----------------------------------------------------------------------------
 
+import sys
 import os
 import json
 import re
@@ -76,7 +77,7 @@ try:
         raise Exception('clientZMQ.json wrong format')
 except Exception as error:
     print('Caught this error: ' + repr(error))
-    exit()
+    sys.exit()
 
 serverZMQ = ServerZMQREP(clientZMQ_config["probe_client"]["port"])
 serverZMQ.start()

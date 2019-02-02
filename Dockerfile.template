@@ -67,9 +67,9 @@ COPY --from=build /app/client_supervision/ /app/client_supervision/
 COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
 
 # set probe port
-ENV PROBE_PORT 5000
+ENV PROBE_PORT 20000
 
 # expose probe port
-EXPOSE 5000
+EXPOSE 20000
 
 CMD ["python3", "/app/client_supervision/client.py"]
