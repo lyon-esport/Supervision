@@ -47,13 +47,32 @@ You have 2 methods :
 
 Windows : Start Server/lazy_server_windows.ps1
 
-Linux : Use dockerfile Server/Dockerfile
+
+Linux : 
+1. Use dockerfile Server/Dockerfile
+2. Set config
+    * SERVER_ZMQ_FIRST_PORT (First ZMQ port server)
+    * SERVER_ZMQ_NB_PORT (Number of ZMQ server)
+    * INFLUXDB_URL (Influxdb URL for autotest) - optionnal
+3. Set expose server port with 
+4. Build the docker `docker build -t server .`
+5. Run the docker `docker run -p 80:80 -p <FIRST_ZMQ_PORT-LAST_ZMQ_PORT:FIRST_ZMQ_PORT-LAST_ZMQ_PORT> server`
 
 #### Client Python
 
-Start Client/lazy_client_windows.ps1
+Windows : Start Client/lazy_client_windows.ps1
 
-Linux : Use dockerfile Client/Dockerfile
+Linux : 
+1. Use dockerfile Client/Dockerfile
+2. Set config
+    * PROBE_NAME
+    * PROBE_IP (localhost IP not docker IP)
+    * PROBE_PORT
+    * SERVER_IP
+    * SERVER_PORT
+3. Set expose probe port with the same value (PROBE_PORT)
+4. Build the docker `docker build -t client .`
+5. Run the docker `docker run -p <PROBE_PORT:PROBE_PORT> client`
 
 ## Standard method
 
