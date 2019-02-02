@@ -56,7 +56,7 @@ Linux :
     * INFLUXDB_URL (Influxdb URL for autotest) - optionnal
 3. Set expose server port with all ZMQ port server
 4. Build the docker `docker build -t server .`
-5. Run the docker `docker run -p 80:80 -p <FIRST_ZMQ_PORT-LAST_ZMQ_PORT:FIRST_ZMQ_PORT-LAST_ZMQ_PORT> server`
+5. Run the docker `docker run --restart=always -p 80:80 -p <FIRST_ZMQ_PORT-LAST_ZMQ_PORT:FIRST_ZMQ_PORT-LAST_ZMQ_PORT> server`
 
 #### Client Python
 
@@ -72,7 +72,7 @@ Linux :
     * SERVER_PORT
 3. Set expose probe port with the same value (PROBE_PORT)
 4. Build the docker `docker build -t client .`
-5. Run the docker `docker run -p <PROBE_PORT:PROBE_PORT> client`
+5. Run the docker `docker run --restart=always -p <PROBE_PORT:PROBE_PORT> client`
 
 ## Standard method
 
