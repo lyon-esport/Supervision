@@ -52,6 +52,9 @@ RUN apk add build-base
 # install git
 RUN apk add git
 
+# install iperf3
+RUN apk add iperf3
+
 # download supervision project
 RUN git clone https://github.com/lyon-esport/Supervision.git
 
@@ -77,6 +80,9 @@ COPY --from=build /app/client_supervision/ /app/client_supervision/
 
 # copy python library
 COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
+
+# copy iperf3
+COPY --from=build  /usr/local/iperf3 /usr/local/iperf3
 
 # set config
 ENV PROBE_NAME Probe

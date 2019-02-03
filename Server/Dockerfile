@@ -72,6 +72,7 @@ RUN apk update
 # install gcc
 RUN apk add build-base
 
+# install gunicorn
 RUN pip3 install gunicorn
 
 # copy server supervision
