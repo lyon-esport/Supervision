@@ -72,7 +72,7 @@ Linux :
     * SERVER_PORT
 3. Set expose probe port with the same value (PROBE_PORT)
 4. Build the docker `docker build -t client .`
-5. Run the docker `docker run --restart=always -p <PROBE_PORT:PROBE_PORT> client`
+5. Run the docker `docker run --restart=always -p 5201:5201 -p <PROBE_PORT:PROBE_PORT> client`
 
 ## Standard method
 

@@ -52,9 +52,6 @@ RUN apk add build-base
 # install git
 RUN apk add git
 
-# install iperf3
-RUN apk add iperf3
-
 # download supervision project
 RUN git clone https://github.com/lyon-esport/Supervision.git
 
@@ -72,6 +69,9 @@ FROM python:3.6-alpine
 # update package
 RUN apk update
 
+# install iperf3
+RUN apk add iperf3
+
 # install gcc
 RUN apk add build-base
 
@@ -81,9 +81,6 @@ COPY --from=build /app/client_supervision/ /app/client_supervision/
 # copy python library
 COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
 
-# copy iperf3
-COPY --from=build  /usr/local/iperf3 /usr/local/iperf3
-
 # set config
 ENV PROBE_NAME Probe
 ENV PROBE_IP 127.0.0.1
@@ -92,6 +89,6 @@ ENV SERVER_IP 127.0.0.1
 ENV SERVER_PORT 30000
 
 # expose probe port
-EXPOSE 20000
+EXPOSE 20000 5201
 
 CMD ["python3", "/app/client_supervision/client.py"]

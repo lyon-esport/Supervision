@@ -46,9 +46,6 @@ ENV INITSYSTEM on
 
 MAINTAINER Ludovic Ortega ludovic.ortega@lyon-esport.fr
 
-# install iperf3
-RUN apt-get install iperf3
-
 # download supervision project
 RUN git clone https://github.com/lyon-esport/Supervision.git
 
@@ -63,19 +60,19 @@ RUN pip install -r ./app/client_supervision/requirements.txt
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.6-latest
 
+# install iperf3
+RUN apt-get install iperf3
+
 # copy client supervision
 COPY --from=build /app/client_supervision/ /app/client_supervision/
 
 # copy python library
 COPY --from=build  /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
 
-# copy iperf3
-COPY --from=build  /usr/local/iperf3 /usr/local/iperf3
-
 # set probe port
 ENV PROBE_PORT 20000
 
 # expose probe port
-EXPOSE 20000
+EXPOSE 20000 5201
 
 CMD ["python3", "/app/client_supervision/client.py"]
