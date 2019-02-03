@@ -36,6 +36,12 @@
     },
     {
       "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": "5.0.0"
+    },
+    {
+      "type": "panel",
       "id": "text",
       "name": "Text",
       "version": "5.0.0"
@@ -58,7 +64,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1549035985786,
+  "iteration": 1549151780011,
   "links": [],
   "panels": [
     {
@@ -421,80 +427,52 @@
       "valueName": "current"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "columns": [],
       "datasource": "${DS_SUPERVISION}",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
+      "fontSize": "100%",
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 24,
         "x": 0,
         "y": 8
       },
-      "id": 25,
-      "interval": null,
+      "id": 31,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
         {
-          "name": "value to text",
-          "value": 1
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
         },
         {
-          "name": "range to text",
-          "value": 2
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
         }
       ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "last",
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "expr": "From",
+          "format": "table",
+          "groupBy": [],
+          "intervalFactor": 1,
           "measurement": "comment",
           "orderByTime": "ASC",
           "policy": "default",
@@ -523,25 +501,16 @@
           ]
         }
       ],
-      "thresholds": "",
       "title": "COMMENT",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "transform": "table",
+      "type": "table"
     },
     {
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 11
       },
       "id": 27,
       "title": "Data",
@@ -553,7 +522,7 @@
         "h": 2,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 12
       },
       "id": 14,
       "links": [],
@@ -567,7 +536,7 @@
         "h": 2,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 12
       },
       "id": 15,
       "links": [],
@@ -586,7 +555,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 14
       },
       "id": 6,
       "legend": {
@@ -794,7 +763,7 @@
         "h": 13,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 14
       },
       "id": 10,
       "legend": {
@@ -1007,7 +976,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 20
+        "y": 21
       },
       "id": 4,
       "legend": {
@@ -1128,7 +1097,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 27
       },
       "id": 2,
       "legend": {
@@ -1249,7 +1218,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 27
       },
       "id": 12,
       "legend": {
@@ -1456,7 +1425,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 33
       },
       "id": 8,
       "legend": {
@@ -1627,7 +1596,7 @@
     ]
   },
   "timezone": "",
-  "title": "Supervision - Probe",
+  "title": "Supervision Probe",
   "uid": "YvY6roUmz",
-  "version": 82
+  "version": 87
 }
