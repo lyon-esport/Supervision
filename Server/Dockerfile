@@ -59,7 +59,7 @@ RUN git clone https://github.com/lyon-esport/Supervision.git
 RUN mkdir -p /app/server_supervision/ && mv Supervision/Server/* /app/server_supervision/
 
 # remove useless file
-RUN cd / && rm -Rf ./Supervision
+RUN rm -Rf ./Supervision /app/server_supervision/lazy_server_windows.ps1
 
 # install dependencies
 RUN pip3 install -r ./app/server_supervision/requirements.txt

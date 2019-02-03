@@ -314,7 +314,10 @@ def start_speedtest(type, address, port, arg):
 
     for key in options:
         try:
-            proc = subprocess.Popen("iperf3" + " -c " + address + " -p " + port + " -J " + options[key], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if os.name == "nt":
+                proc = subprocess.Popen("iperf3" + " -c " + address + " -p " + port + " -J " + options[key], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            else:
+                proc = subprocess.Popen(["iperf3"] + [" -c " + address + " -p " + port + " -J " + options[key]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             result = json.loads(proc.communicate()[0].decode())
             if "error" not in result:
 

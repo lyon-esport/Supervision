@@ -59,7 +59,7 @@ RUN git clone https://github.com/lyon-esport/Supervision.git
 RUN mkdir -p /app/client_supervision/ && mv Supervision/Client/* /app/client_supervision/
 
 # remove useless file
-RUN cd / && rm -Rf ./Supervision
+RUN rm -Rf ./Supervision /app/client_supervision/iperf3.exe /app/client_supervision/cygwin1.dll
 
 # install dependencies
 RUN pip3 install -r ./app/client_supervision/requirements.txt
