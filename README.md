@@ -82,7 +82,7 @@ Linux :
 
 2. Install the requirements: `pip install -r requirements.txt`
 
-3. Create the database `python setup.py` to generate the database (database.sqlite will appear)
+3. Create the database `python database_setup.py` to generate the database (database.sqlite will appear)
 
 4. Create `config/server.json` with the right settings (example : `config/server.example`)
 
