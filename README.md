@@ -20,14 +20,15 @@ You can supervise your network in less than 10 minutes.
 
 #### Server Python
 *  Debian (Windows will use a developpement server not recommended for production)
-*  Python 3.6 or newer (Only for Standard method)
-*  Pip (Only for Standard method)
-*  Docker (Only for Lazy method)
+*  Python 3.6 or newer (Standard method only)
+*  Pip (Standard method only)
+*  Docker (Lazy method only)
 
 #### Client Python
-*  Python 3.6 or newer (Only for Standard method)
-*  Pip (Only for Standard method)
-*  Docker (Only for Lazy method)
+*  Python 3.6 or newer (Standard method only)
+*  Pip (Standard method only)
+*  Docker (Lazy method only)
+*  iPerf3 (Linux only)
 
 # Install and start the application
 
