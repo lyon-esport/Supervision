@@ -291,7 +291,7 @@ function disableForm()
     let speedtest_port = true;
 
     let probeFree = document.getElementById("probe_select").children[0].classList.contains('select');
-    console.log("Test" + probeFree);
+
     let autotest = true;
 
     let comments = checkInputComment("comments", 0, 500, regexComment);
