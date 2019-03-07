@@ -48,7 +48,7 @@ from functions.ServerZMQ import ServerZMQREP
 from functions.ClientZMQ import ClientZMQREQ
 
 regex_ip = r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
-regex_name = r"^[0-9a-zA-Z -_]{4,20}$"
+regex_name = r"^[0-9a-zA-Z-_]{4,20}$"
 
 # get client ZMQ configuration
 

@@ -44,7 +44,7 @@ import os
 import json
 import re
 from pathlib import Path
-from flask import Flask, session, redirect, request, render_template
+from flask import Flask, session, redirect, request, render_template, jsonify
 
 # import local functions
 from functions.Bdd import Bdd
@@ -89,7 +89,7 @@ except Exception as error:
 regex_id = r"^[+]?[0-9]+$"
 regex_ip = r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
 regex_port = r"^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$"
-regex_name = r"^[0-9a-zA-Z -_]{4,20}$"
+regex_name = r"^[0-9a-zA-Z-_]{4,20}$"
 regex_comment = r"^[a-zA-Z0-9@-_'\".()àéè&=+~^*!:?,<>ç{}%¨ ]*$"
 
 # check if database is created
@@ -107,11 +107,17 @@ except Exception as error:
 request_test_timeout = 120
 
 # start server ZMQ
-listServerZMQ = ListServerClientZMQ(bdd, server_config['influxdb_url'])
-for i in range(0, len(set(server_config['server_zmq']['port']))):
-    listServerZMQ.add("server", ServerZMQREP(server_config['server_zmq']['port'][i]))
-    listServerZMQ.add("client", ClientZMQREQ(request_test_timeout))
-    listServerZMQ.get("server", i).start()
+try:
+    listServerZMQ = ListServerClientZMQ(bdd, server_config['influxdb_url'])
+    for i in range(0, len(set(server_config['server_zmq']['port']))):
+        if not re.match(regex_port, str(server_config['server_zmq']['port'][i])):
+            raise Exception('clientZMQ.json wrong format')
+        listServerZMQ.add("server", ServerZMQREP(server_config['server_zmq']['port'][i]))
+        listServerZMQ.add("client", ClientZMQREQ(request_test_timeout))
+        listServerZMQ.get("server", i).start()
+except Exception as error:
+    print('Caught this error: ' + repr(error))
+    sys.exit()
 
 listServerZMQ.start()
 
@@ -195,6 +201,23 @@ def test():
             }
             session['nbMessage'] = 1
     return redirect('/archive')
+
+@app.route('/autotest_json', methods=['GET'])
+def autotest_json():
+    data = None
+    if request.method == 'GET':
+        try:
+            address = request.values.get('address')
+            port = request.values.get('port')
+            if address and port:
+                server = listServerZMQ.get("server",  address + ":" + port)
+            else:
+                raise Exception('parameter is missing')
+            if server and server.json:
+                data = server.json
+        except Exception:
+            pass
+    return jsonify(data)
 
 
 @app.route('/backend_server', methods=['POST'])

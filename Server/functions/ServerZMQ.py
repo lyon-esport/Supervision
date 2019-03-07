@@ -64,6 +64,8 @@ class ServerZMQREP (threading.Thread):
                         "autotest": False
                         }
         self.message = None
+        self.json = None
+        self.json_version = 0
         self.port = port
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)

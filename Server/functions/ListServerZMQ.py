@@ -43,6 +43,8 @@ import logging
 import requests
 import threading
 import time
+import json
+import copy
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -60,16 +62,17 @@ class ListServerClientZMQ(threading.Thread):
         while True:
             for clientZMQ in self.listClientZMQ:
                 if clientZMQ.message is not None:
+                    serverZMQ_id = self.listServerZMQ[self.listClientZMQ.index(clientZMQ)]
+                    serverZMQ_id.json_version += 1
+                    serverZMQ_id.json = ListServerClientZMQ.format_for_web(serverZMQ_id.json_version, clientZMQ.message)
                     if not clientZMQ.message["influxdb"]:
                         if self.bdd.get_range_test_from_id(clientZMQ.message["id"], clientZMQ.message["id"]):
-                            self.bdd.update_test("probe", clientZMQ.message["id"], self.format_for_bdd(clientZMQ.message))
-                            clientZMQ.message = None
+                            self.bdd.update_test("probe", clientZMQ.message["id"], ListServerClientZMQ.format_for_bdd(clientZMQ.message))
                     else:
                         if self.influxdb_url is not None and self.influxdb_url != "":
-                            data = self.format_for_influx(clientZMQ.message)
+                            data = ListServerClientZMQ.format_for_influx(clientZMQ.message)
                             self.send_to_influxdb(self.influxdb_url, data)
-                            clientZMQ.message = None
-
+                    clientZMQ.message = None
                 if clientZMQ.busy:
                     self.get("server", self.listClientZMQ.index(clientZMQ)).client["busy"] = True
                 else:
@@ -82,11 +85,18 @@ class ListServerClientZMQ(threading.Thread):
         else:
             self.listClientZMQ.append(zmq)
 
-    def get(self, type, id):
-        if type == "server":
-            return self.listServerZMQ[id]
+    def get(self, type, match):
+        if isinstance(match, int):
+            if type == "server":
+                return self.listServerZMQ[match]
+            else:
+                return self.listClientZMQ[match]
         else:
-            return self.listClientZMQ[id]
+            if type == "server":
+                for server in self.listServerZMQ:
+                    if server.client["address"] + ":" + str(server.client["port"]) == match:
+                        return server
+                raise Exception('None server with this name')
 
     def get_list_name(self):
         list_server_zmq_name = []
@@ -159,45 +169,46 @@ class ListServerClientZMQ(threading.Thread):
 
     @staticmethod
     def format_for_bdd(message):
-        if message["ping"] != "error":
-            if message["packet_loss"] != "":
-                message["packet_loss"] = "Packet loss: " + str(
-                    message["packet_loss"]["packet_number"]) + ", Percentage of lost: " + str(
-                    message["packet_loss"]["packet_percent"]) + "%"
+        data = message
+        if data["ping"] != "error":
+            if data["packet_loss"] != "":
+                data["packet_loss"] = "Packet loss: " + str(
+                    data["packet_loss"]["packet_number"]) + ", Percentage of lost: " + str(
+                    data["packet_loss"]["packet_percent"]) + "%"
             else:
-                message["packet_loss"] = ""
-            if message["ping"] != "":
-                message["ping"] = "Min ping: " + str(message["ping"]["min"]) + ", Max ping: " + str(
-                    message["ping"]["max"]) + ", Average ping: " + str(message["ping"]["avg"])
+                data["packet_loss"] = ""
+            if data["ping"] != "":
+                data["ping"] = "Min ping: " + str(data["ping"]["min"]) + ", Max ping: " + str(
+                    data["ping"]["max"]) + ", Average ping: " + str(data["ping"]["avg"])
             else:
-                message["ping"] = ""
+                data["ping"] = ""
         else:
-            message["ping"] = "Error host unreachable"
-            message["jitter"] = "Error host unreachable"
-            message["packet_loss"] = "Error host unreachable"
-            message["mos"] = "Error host unreachable"
-        if message["speedtest"] != "":
+            data["ping"] = "Error host unreachable"
+            data["jitter"] = "Error host unreachable"
+            data["packet_loss"] = "Error host unreachable"
+            data["mos"] = "Error host unreachable"
+        if data["speedtest"] != "":
             for speedtest in ["download", "upload"]:
-                if message["speedtest"][speedtest] != "":
-                    if message["speedtest"][speedtest]["status"] == "success":
-                        speedtest_result = "min=" + ListServerClientZMQ.speedof(message["speedtest"][speedtest]["result"]["min"]) \
-                                    + ", avg=" + ListServerClientZMQ.speedof(message["speedtest"][speedtest]["result"]["avg"]) \
-                                    + ", max=" + ListServerClientZMQ.speedof(message["speedtest"][speedtest]["result"]["max"])
-                        speedtest_json_raw = message["speedtest"][speedtest]["json"]
+                if data["speedtest"][speedtest] != "":
+                    if data["speedtest"][speedtest]["status"] == "success":
+                        speedtest_result = "min=" + ListServerClientZMQ.speedof(data["speedtest"][speedtest]["result"]["min"]) \
+                                    + ", avg=" + ListServerClientZMQ.speedof(data["speedtest"][speedtest]["result"]["avg"]) \
+                                    + ", max=" + ListServerClientZMQ.speedof(data["speedtest"][speedtest]["result"]["max"])
+                        speedtest_json_raw = data["speedtest"][speedtest]["json"]
                     else:
-                        speedtest_result = "Error : " + message["speedtest"][speedtest]["message"]
+                        speedtest_result = "Error : " + data["speedtest"][speedtest]["message"]
                         speedtest_json_raw = ""
                 else:
                     speedtest_result = ""
                     speedtest_json_raw = ""
-                message[speedtest] = speedtest_result
-                message[speedtest + "_json_raw"] = speedtest_json_raw
+                data[speedtest] = speedtest_result
+                data[speedtest + "_json_raw"] = speedtest_json_raw
         else:
-            message["download"] = ""
-            message["download_json_raw"] = ""
-            message["upload"] = ""
-            message["upload_json_raw"] = ""
-        return message
+            data["download"] = ""
+            data["download_json_raw"] = ""
+            data["upload"] = ""
+            data["upload_json_raw"] = ""
+        return data
 
     @staticmethod
     def format_for_influx(message):
@@ -229,4 +240,10 @@ class ListServerClientZMQ(threading.Thread):
             data = data + "iperf_option,probe=" + message["probe_name"] + " value=\"" + str(message["speedtest_option"]) + "\"\n"
         if message["comment"] != "":
             data = data + "comment,probe=" + message["probe_name"] + " value=\"" + message["comment"] + "\"\n"
+        return data
+
+    @staticmethod
+    def format_for_web(version, message):
+        data = copy.deepcopy(message)
+        data['version'] = version
         return data

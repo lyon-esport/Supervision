@@ -161,6 +161,64 @@ You have two types of test : `test` and `autotest`
 
 You can see all autotest launched and you can stop them.
 
+#### Autotest_json (Get last test as JSON format)
+
+You need to provide two get parameters `address` and `port`, it's the address and port of your probe (example : http://127.0.0.1/autotest_json?address=127.0.0.1&port=5000).
+It will return the last test (can be an autotest or a standard test) formated as JSON.
+To check if it's a new result compare the field `version` (it will increment after each test performed).
+When you start your server the version will be equal to 0 and version depends of the ZMQServer.
+For example if a probe (Probe_A) is connected on port 4000, after 10 minutes you shutdown the probe and you connect an other one (Probe_B) on port 4000.
+The value of field `version` for the first test of Probe_B will be equal to the last value of Probe_A + 1.
+Example :
+```json
+{
+    "version":1,
+    "type":"result",
+    "id": 1,                        //[OPTIONAL] ("Standard test" only) id of test for SQLite database
+    "probe_name": "Probe_A",        //probe name
+    "ping": {                       //[OPTIONAL] ("Standard test" only)
+        "avg":23.67,                    //ping average value
+        "max":31,                       //ping minimum value
+        "min":21                        //ping maximum value
+    },
+    "jitter": "1.79",               //[OPTIONAL] jitter value  ("Standard test" only)
+    "packet_loss": {                //[OPTIONAL] ("Standard test" only)
+        "packet_number":0,              //number of packet loss
+        "packet_percent":0.0            //percentage of packet loss
+    },
+    "mos": "4.40",                  //[OPTIONAL] mos value  ("Standard test" only)
+    "packet_number": 100,           //[OPTIONAL] number of packet send  ("Standard test" only)
+    "packet_timeout": 3,            //[OPTIONAL] timeout for each packet sent  ("Standard test" only)
+    "speedtest": {                  //[OPTIONAL] (Autotest only)
+        "download":                     //[OPTIONAL] ("Download" test and "Download and Upload" test Only)
+        {
+            "status": "success",            //test success = success, test fail = error
+            "message": "message",           //[OPTIONAL] (only if status=error) error message
+            "result": {                     //[OPTIONAL] (only if status=success)
+                "avg": 40,                      //bandwidth average value
+                "min": 30,                      //bandwidth minimum value
+                "max": 50                       //bandwidth maximum value
+            },
+            "json": {...}                   //json result of iperf
+        },
+        "upload":                       //[OPTIONAL] ("Upload" test and "Download and Upload" test Only)
+        {
+            "status": "success",            //test success = success, test fail = error
+            "message": "message",           //[OPTIONAL] (only if status=error) error message
+            "result": {                     //[OPTIONAL] (only if status=success)
+                "avg": 40,                  //bandwidth average value
+                "min": 30,                  //bandwidth minimum value
+                "max": 50                   //bandwidth maximum value
+            },
+            "json": {...}                   //json result of iperf
+        }
+    },
+    "speedtest_option": "result",   //[OPTIONAL] iperf option  ("Autotest" only)
+    "comment": "result",            //your comment
+    "influxdb": false,              //"Standard test" = false, "Autotest" = true
+    "status": "done",               //test performed = "done", test not performed = "error"
+}
+```
 ## HTTP request InfluxDB
 
 All query forwarded to InfluxDB.
