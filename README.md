@@ -200,7 +200,7 @@ Example :
                 "min": 30,                      //bandwidth minimum value
                 "max": 50                       //bandwidth maximum value
             },
-            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error)
+            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error or if status=success)
         },
         "upload":                       //[OPTIONAL] ("Upload" test and "Download and Upload" test Only)
         {
@@ -211,7 +211,7 @@ Example :
                 "min": 30,                  //bandwidth minimum value
                 "max": 50                   //bandwidth maximum value
             },
-            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error)
+            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error or if status=success)
         }
     },
     "speedtest_option": "result",   //[OPTIONAL] iperf option  ("Autotest" only)
