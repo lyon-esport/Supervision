@@ -175,7 +175,7 @@ Example :
 {
     "version":1,
     "type":"result",
-    "id": 1,                        //[OPTIONAL] ("Standard test" only) id of test for SQLite database
+    "id": 1,                        //[OPTIONAL] id of test for SQLite database ("Standard test" only)
     "probe_name": "Probe_A",        //probe name
     "ping": {                       //[OPTIONAL] ("Standard test" only)
         "avg":23.67,                    //ping average value
@@ -194,24 +194,24 @@ Example :
         "download":                     //[OPTIONAL] ("Download" test and "Download and Upload" test Only)
         {
             "status": "success",            //test success = success, test fail = error
-            "message": "message",           //[OPTIONAL] (only if status=error) error message
+            "message": "message",           //[OPTIONAL] error message (only if status=error)
             "result": {                     //[OPTIONAL] (only if status=success)
                 "avg": 40,                      //bandwidth average value
                 "min": 30,                      //bandwidth minimum value
                 "max": 50                       //bandwidth maximum value
             },
-            "json": {...}                   //json result of iperf
+            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error)
         },
         "upload":                       //[OPTIONAL] ("Upload" test and "Download and Upload" test Only)
         {
             "status": "success",            //test success = success, test fail = error
-            "message": "message",           //[OPTIONAL] (only if status=error) error message
+            "message": "message",           //[OPTIONAL] error message (only if status=error)
             "result": {                     //[OPTIONAL] (only if status=success)
                 "avg": 40,                  //bandwidth average value
                 "min": 30,                  //bandwidth minimum value
                 "max": 50                   //bandwidth maximum value
             },
-            "json": {...}                   //json result of iperf
+            "json": {...}                   //[OPTIONAL] json result of iperf (only if error is an iperf error)
         }
     },
     "speedtest_option": "result",   //[OPTIONAL] iperf option  ("Autotest" only)
