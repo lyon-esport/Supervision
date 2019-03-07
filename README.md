@@ -68,7 +68,7 @@ Linux :
 1. Use dockerfile Client/Dockerfile
 2. Set config
     * PROBE_NAME
-    * PROBE_IP (localhost IP not docker IP)
+    * PROBE_IP
     * PROBE_PORT
     * SERVER_IP
     * SERVER_PORT
@@ -163,7 +163,7 @@ You can see all autotest launched and you can stop them.
 
 ## HTTP request InfluxDB
 
-All query forwarded to InfluxDB .
+All query forwarded to InfluxDB.
 
 #### For standard test
 
