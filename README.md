@@ -170,7 +170,7 @@ When you start your server the version will be equal to 0 and version depends of
 For example if a probe (Probe_A) is connected on port 4000, after 10 minutes you shutdown the probe and you connect an other one (Probe_B) on port 4000.
 The value of field `version` for the first test of Probe_B will be equal to the last value of Probe_A + 1.
 Example :
-```json
+```
 {
     "version":1,
     "type":"result",
