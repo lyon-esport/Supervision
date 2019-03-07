@@ -4,7 +4,8 @@ Our project has been developed for Windows, Linux and IOT and is very easy to de
 (Automatic deployment for IOT and installation and configuration scripts for Windows and Linux).
 You can supervise your network in less than 10 minutes.
 
-![Application_example.png](https://i.imgur.com/bzOrcxy.png)
+#### Architecture
+![diagram.png](diagram.png)
 
 # This tool uses :
 
