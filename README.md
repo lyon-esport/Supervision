@@ -13,6 +13,7 @@ You can supervise your network in less than 10 minutes.
 * [Gunicorn](https://gunicorn.org/) - WSGI HTTP Server for UNIX
 * [Jinja2](http://jinja.pocoo.org/) - Template engine
 * [Bulma](https://bulma.io/) - CSS framework
+* [Font Awesome](https://fontawesome.com/) - Icon library
 * [PyZMQ](http://zguide.zeromq.org/py:all) - Python bindings for ØMQ
 * [Requests](http://docs.python-requests.org/) - HTTP library
 * [Balena](https://www.balena.io/) - Container-based platform for deploying IoT applications
