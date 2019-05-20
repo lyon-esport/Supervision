@@ -15,11 +15,9 @@ html, body {
 .site-footer, .page-wrap:after {
     height: 155px;
 }
-
-<<<<<<< HEAD
 .text-align-icon{
     vertical-align:middle;
-=======
+}
 body > div > div {
     text-align: center;
 }
