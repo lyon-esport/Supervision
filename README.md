@@ -1,3 +1,6 @@
+![Docker Automated build](https://img.shields.io/docker/cloud/automated/lyonesport/supervision?style=flat-square)
+![Docker Build Status](https://img.shields.io/docker/cloud/build/lyonesport/supervision?style=flat-square)
+
 The goal of this project is to start tests (ping/jitter/packet loss/mos/download/upload) from a client 
 (it can be anything as long as it meets requirements) to a target to monitor network between the client and the target.
 Our project has been developed for Windows, Linux and IOT and is very easy to deploy 
@@ -50,32 +53,13 @@ You have 2 methods :
 
 Windows : Start Server/lazy_server_windows.ps1
 
-
-Linux : 
-1. Use dockerfile Server/Dockerfile
-2. Set config
-    * SERVER_ZMQ_FIRST_PORT (First ZMQ port server)
-    * SERVER_ZMQ_NB_PORT (Number of ZMQ server)
-    * INFLUXDB_URL (Influxdb URL for autotest) - optionnal
-3. Set expose server port with all ZMQ port server
-4. Build the docker `docker build -t server .`
-5. Run the docker `docker run -d --restart=always -p 80:80 -p <FIRST_ZMQ_PORT-LAST_ZMQ_PORT:FIRST_ZMQ_PORT-LAST_ZMQ_PORT> server`
+Linux : Run the docker `docker run -d --restart=always -e "SERVER_ZMQ_FIRST_PORT=30000" -e "SERVER_ZMQ_NB_PORT=10" -e "INFLUXDB_URL=http://127.0.0.1:8086/write?db=prober" -p 80:80 -p 30000-30009:30000-30009 lyonesport/supervision:server-latest`
 
 #### Client Python
 
 Windows : Start Client/lazy_client_windows.ps1
 
-Linux : 
-1. Use dockerfile Client/Dockerfile
-2. Set config
-    * PROBE_NAME
-    * PROBE_IP
-    * PROBE_PORT
-    * SERVER_IP
-    * SERVER_PORT
-3. Set expose probe port with the same value (PROBE_PORT)
-4. Build the docker `docker build -t client .`
-5. Run the docker `docker run -d --restart=always -p 5201:5201 -p <PROBE_PORT:PROBE_PORT> client`
+Linux : Run the docker `docker run -d --restart=always -e "PROBE_NAME=Probe" -e "PROBE_IP=127.0.0.1" -e "PROBE_PORT=20000" -e "SERVER_IP=127.0.0.1" -e "SERVER_PORT=30000" -p 5201:5201 -p 20000:20000 lyonesport/supervision:client-latest`
 
 ## Standard method
 
