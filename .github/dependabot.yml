@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/Server"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - M0NsTeRRR
+- package-ecosystem: pip
+  directory: "/Client"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - M0NsTeRRR
