@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.12.0a1-alpine
 
 LABEL maintainer="Ludovic Ortega ludovic.ortega@lyon-esport.fr"
 
